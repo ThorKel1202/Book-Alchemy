@@ -5,17 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Book Overview</title>
+  <style>
+  a {
+    display: inline-block;
+    padding: 10px 15px;
+    margin-right: 10px;
+    background-color: #333;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+
+  a:hover {
+    background-color: #555;
+  }
+</style>
 </head>
 <body>
+
+  <div>
+    <a href="/?sort_by=title">Nach Titel sortieren</a>
+    <a href="/?sort_by=author">Nach Autor sortieren</a>
+  </div>
 
   {% for book in books %}
     <div>
       <h3>{{ book.title }}</h3>
       <p>Author: {{ book.author.name }}</p>
-      <p>ISBN: {{ book.isbn }}</p>
 
       <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg"
-     alt="Leider gibt es kein Cover für {{ book.title }}">
+           alt="Kein Cover für {{ book.title }}">
     </div>
   {% endfor %}
 
