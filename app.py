@@ -114,5 +114,17 @@ def author_detail(author_id):
     return render_template("author_detail.html", author=author)
 
 
+@app.route("/author/<int:author_id>/delete", methods=["POST"])
+def delete_author(author_id):
+    author = Author.query.get_or_404(author_id)
+
+    db.session.delete(author)
+    db.session.commit()
+
+    flash("The Author was successfully deleted!")
+
+    return redirect(url_for("home"))
+
+
 if __name__ == "__main__":
     app.run(debug=True)
