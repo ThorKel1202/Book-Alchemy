@@ -126,5 +126,21 @@ def delete_author(author_id):
     return redirect(url_for("home"))
 
 
+@app.route("/book/<int:book_id>/rate", methods=["POST"])
+def rate_book(book_id):
+    book = Book.query.get_or_404(book_id)
+
+    rating = int(request.form["rating"])
+
+    if 1 <= rating <= 10:
+        book.rating = rating
+        db.session.commit()
+        flash("Book was rated successfully!")
+    else:
+        flash("The rating must be between 1 and 10!")
+
+    return redirect(url_for("home"))
+
+
 if __name__ == "__main__":
     app.run(debug=True)
