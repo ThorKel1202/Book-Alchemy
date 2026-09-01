@@ -1,16 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  </head>
-  <body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Book Overview</title>
+</head>
+<body>
 
-    {% for book in books %}
-    <div> <h3>{{ book.title }}</h3>
+  {% for book in books %}
+    <div>
+      <h3>{{ book.title }}</h3>
+      <p>Author: {{ book.author.name }}</p>
+      <p>ISBN: {{ book.isbn }}</p>
+
+      <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg"
+     alt="Leider gibt es kein Cover für {{ book.title }}">
     </div>
-    {% endfor %}
+  {% endfor %}
 
-  </body>
+</body>
 </html>
+

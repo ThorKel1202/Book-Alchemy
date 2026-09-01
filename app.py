@@ -10,8 +10,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(basedir, 'data
 
 db.init_app(app)
 
-# with app.app_context():
-#     db.create_all()
+with app.app_context():
+    db.create_all()
 
 @app.route("/add_author", methods=["GET", "POST"])
 def add_author():
@@ -70,3 +70,14 @@ def add_book():
         )
 
     return render_template("add_book.html", authors=authors)
+
+
+@app.route("/")
+def home():
+    books = Book.query.all()
+
+    return render_template("home.html", books=books)
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
