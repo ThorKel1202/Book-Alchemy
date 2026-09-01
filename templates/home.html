@@ -6,6 +6,33 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Book Overview</title>
   <style>
+  form {
+    margin-bottom: 15px;
+  }
+
+  input[type="text"] {
+    padding: 10px;
+    width: 250px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+
+  button {
+    padding: 10px 15px;
+    margin-left: 5px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  button:hover {
+    background-color: #555;
+  }
+
   a {
     display: inline-block;
     padding: 10px 15px;
@@ -22,10 +49,13 @@
 </style>
 </head>
 <body>
-
+  <form action="/" method="GET">
+    <input type="text" name="search" placeholder="Search for a book">
+    <button type="submit">Search</button>
+  </form>
   <div>
-    <a href="/?sort_by=title">Nach Titel sortieren</a>
-    <a href="/?sort_by=author">Nach Autor sortieren</a>
+    <a href="/?sort_by=title">Sort by title</a>
+    <a href="/?sort_by=author">Sort by author</a>
   </div>
 
   {% for book in books %}
@@ -36,6 +66,8 @@
       <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg"
            alt="Kein Cover für {{ book.title }}">
     </div>
+  {% else %}
+    <p>No book found for this search!</p>
   {% endfor %}
 
 </body>
