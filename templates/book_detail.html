@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ book.title }}</title>
+</head>
+
+<body>
+
+    <h1>{{ book.title }}</h1>
+
+    <p><strong>Author:</strong> {{ book.author.name }}</p>
+    <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+    <p><strong>Publication year:</strong> {{ book.publication_year }}</p>
+
+    <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg"
+         alt="Kein Cover für {{ book.title }}">
+
+    <br><br>
+
+    <a href="/">Zurück zur Bibliothek</a>
+
+</body>
+</html>

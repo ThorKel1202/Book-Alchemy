@@ -33,7 +33,7 @@
     background-color: #555;
   }
 
-  a {
+  .button {
     display: inline-block;
     padding: 10px 15px;
     margin-right: 10px;
@@ -43,18 +43,18 @@
     border-radius: 5px;
   }
 
-  a:hover {
+  .button:hover {
     background-color: #555;
   }
-  .delete-message {
-    display: inline-block;
-    padding: 10px 15px;
-    background-color: red;
-    color: white;
-    font-weight: bold;
-    border-radius: 5px;
-    margin-bottom: 15px;
-}
+
+  .book-link {
+    color: #333;
+    text-decoration: none;
+  }
+
+  .book-link:hover {
+    text-decoration: underline;
+  }
 </style>
 </head>
 <body>
@@ -63,8 +63,10 @@
     <button type="submit">Search</button>
   </form>
   <div>
-    <a href="/?sort_by=title">Sort by title</a>
-    <a href="/?sort_by=author">Sort by author</a>
+    <a class="button" href="/add_book">Add a book</a>
+    <a class="button" href="/add_author">Add an author</a>
+    <a class="button" href="/?sort_by=title">Sort by title</a>
+    <a class="button" href="/?sort_by=author">Sort by author</a>
   </div>
 
   {% with messages = get_flashed_messages() %}
@@ -77,11 +79,20 @@
 
   {% for book in books %}
     <div>
-      <h3>{{ book.title }}</h3>
-      <p>Author: {{ book.author.name }}</p>
+      <h3>
+          <a class="book-link" href="{{ url_for('book_detail', book_id=book.id) }}">
+              {{ book.title }}
+          </a>
+      </h3>
+      <p>
+          Author:
+          <a class="book-link" href="{{ url_for('author_detail', author_id=book.author.id) }}">
+              {{ book.author.name }}
+          </a>
+      </p>
 
       <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg"
-           alt="Kein Cover für {{ book.title }}">
+           alt="No cover found for {{ book.title }}">
 
       <form action="{{ url_for('delete_book', book_id=book.id) }}" method="POST">
         <button type="submit">Delete book</button>
