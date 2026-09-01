@@ -1,9 +1,10 @@
 from datetime import datetime
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 import os
 from data_models import db, Author, Book
 app = Flask(__name__)
+app.secret_key = "dev-secret-key"
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(basedir, 'data/library.sqlite')}"
@@ -85,6 +86,18 @@ def home():
         books = Book.query.order_by(Book.title).all()
 
     return render_template("home.html", books=books, search=search)
+
+
+@app.route("/book/<int:book_id>/delete", methods=["POST"])
+def delete_book(book_id):
+    book = Book.query.get_or_404(book_id)
+
+    db.session.delete(book)
+    db.session.commit()
+
+    flash("The book was successfully deleted!")
+
+    return redirect(url_for("home"))
 
 
 if __name__ == "__main__":

@@ -46,6 +46,15 @@
   a:hover {
     background-color: #555;
   }
+  .delete-message {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
 </style>
 </head>
 <body>
@@ -58,6 +67,14 @@
     <a href="/?sort_by=author">Sort by author</a>
   </div>
 
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for message in messages %}
+      <p class="delete-message">{{ message }}</p>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
   {% for book in books %}
     <div>
       <h3>{{ book.title }}</h3>
@@ -65,6 +82,10 @@
 
       <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg"
            alt="Kein Cover für {{ book.title }}">
+
+      <form action="{{ url_for('delete_book', book_id=book.id) }}" method="POST">
+        <button type="submit">Delete book</button>
+      </form>
     </div>
   {% else %}
     <p>No book found for this search!</p>
