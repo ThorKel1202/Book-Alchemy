@@ -1,33 +1,180 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ author.name }}</title>
+
+<html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>{{ author.name }}</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 40px;
+        background-color: #f4f4f4;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .author-detail {
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        margin-bottom: 30px;
+    }
+
+    .author-info {
+        text-align: center;
+    }
+
+    .author-info p {
+        font-size: 17px;
+        margin: 12px 0;
+    }
+
+    h2 {
+        text-align: center;
+        margin: 35px 0 20px 0;
+    }
+
+    .book-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    .book-card {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        text-align: center;
+    }
+
+    .book-card a {
+        color: #333;
+        text-decoration: none;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .book-card a:hover {
+        text-decoration: underline;
+    }
+
+    .button {
+        display: inline-block;
+        padding: 10px 18px;
+        margin-top: 30px;
+        background-color: #333;
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: bold;
+    }
+
+    .button:hover {
+        background-color: #555;
+    }
+
+    .no-books {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        text-align: center;
+    }
+
+    .back-button {
+        text-align: center;
+    }
+
+    @media (max-width: 900px) {
+        .book-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 600px) {
+        body {
+            padding: 20px;
+        }
+
+        .book-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
 </head>
 
 <body>
 
-    <h1>{{ author.name }}</h1>
+<div class="container">
 
-    <p><strong>Birth date:</strong> {{ author.birthdate }}</p>
-    <p><strong>Date of death:</strong> {{ author.date_of_death }}</p>
+<h1>✍️ {{ author.name }}</h1>
 
-    <h2>Books</h2>
+<div class="author-detail">
 
-    {% for book in author.books %}
+    <div class="author-info">
+
         <p>
-            <a href="{{ url_for('book_detail', book_id=book.id) }}">
-                {{ book.title }}
-            </a>
+            <strong>Birth date:</strong>
+            {{ author.birthdate }}
         </p>
-    {% else %}
-        <p>Dieser Autor hat keine Bücher in der Bibliothek.</p>
-    {% endfor %}
 
-    <br>
+        <p>
+            <strong>Date of death:</strong>
+            {{ author.date_of_death }}
+        </p>
 
-    <a href="/">Zurück zur Bibliothek</a>
+    </div>
 
-</body>
-</html>
+</div>
+
+<h2>📚 Books by this author</h2>
+
+{% if author.books %}
+
+    <div class="book-grid">
+
+        {% for book in author.books %}
+
+            <div class="book-card">
+
+                <a href="{{ url_for('book_detail', book_id=book.id) }}">
+                    {{ book.title }}
+                </a>
+
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+{% else %}
+
+    <div class="no-books">
+        Dieser Autor hat keine Bücher in der Bibliothek.
+    </div>
+
+{% endif %}
+
+<div class="back-button">
+
+    <a href="{{ url_for('home') }}" class="button">
+        📚 Back to the library
+    </a>
+
+</div>
+
+</div>
+
+</body> </html>

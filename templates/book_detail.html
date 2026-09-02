@@ -1,25 +1,135 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ book.title }}</title>
+
+<html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>{{ book.title }}</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 40px;
+        background-color: #f4f4f4;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .book-detail {
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+        display: flex;
+        gap: 30px;
+        align-items: center;
+    }
+
+    .book-cover {
+        width: 180px;
+        height: auto;
+        border-radius: 5px;
+        flex-shrink: 0;
+    }
+
+    .book-info {
+        flex: 1;
+    }
+
+    .book-info p {
+        font-size: 17px;
+        margin: 15px 0;
+    }
+
+    .button {
+        display: inline-block;
+        padding: 10px 18px;
+        margin-top: 30px;
+        background-color: #333;
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: bold;
+    }
+
+    .button:hover {
+        background-color: #555;
+    }
+
+    @media (max-width: 600px) {
+        body {
+            padding: 20px;
+        }
+
+        .book-detail {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .book-cover {
+            width: 150px;
+        }
+    }
+</style>
+
 </head>
 
 <body>
 
-    <h1>{{ book.title }}</h1>
+<div class="container">
 
-    <p><strong>Author:</strong> {{ book.author.name }}</p>
-    <p><strong>ISBN:</strong> {{ book.isbn }}</p>
-    <p><strong>Publication year:</strong> {{ book.publication_year }}</p>
+<h1>📖 {{ book.title }}</h1>
 
-    <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg"
-         alt="Kein Cover für {{ book.title }}">
+<div class="book-detail">
 
-    <br><br>
+    <img
+        class="book-cover"
+        src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg"
+        alt="Kein Cover für {{ book.title }}"
+    >
 
-    <a href="/">Zurück zur Bibliothek</a>
+    <div class="book-info">
 
-</body>
-</html>
+        <p>
+            <strong>Author:</strong>
+            {{ book.author.name }}
+        </p>
+
+        <p>
+            <strong>ISBN:</strong>
+            {{ book.isbn }}
+        </p>
+
+        <p>
+            <strong>Publication year:</strong>
+            {{ book.publication_year }}
+        </p>
+
+        {% if book.rating %}
+            <p>
+                <strong>Rating:</strong>
+                ⭐{{ book.rating }}/10
+            </p>
+        {% endif %}
+
+    </div>
+
+</div>
+
+<div style="text-align: center;">
+    <a href="{{ url_for('home') }}" class="button">
+        📚 Back to the library
+    </a>
+</div>
+
+</div>
+
+</body> </html>

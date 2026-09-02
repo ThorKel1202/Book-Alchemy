@@ -1,128 +1,268 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Book Overview</title>
-  <style>
-  form {
-    margin-bottom: 15px;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Book Overview</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 40px;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
 
-  input[type="text"] {
-    padding: 10px;
-    width: 250px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-  }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-  button {
-    padding: 10px 15px;
-    margin-left: 5px;
-    background-color: #333;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-  }
+        h1 {
+            margin-bottom: 30px;
+        }
 
-  button:hover {
-    background-color: #555;
-  }
+        /* Search */
+        .search-form {
+            margin-bottom: 20px;
+        }
 
-  .button {
-    display: inline-block;
-    padding: 10px 15px;
-    margin-right: 10px;
-    background-color: #333;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-  }
+        input[type="text"] {
+            padding: 10px;
+            width: 250px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
 
-  .button:hover {
-    background-color: #555;
-  }
+        /* Buttons */
+        button {
+            padding: 10px 15px;
+            margin-left: 5px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
 
-  .book-link {
-    color: #333;
-    text-decoration: none;
-  }
+        button:hover {
+            background-color: #555;
+        }
 
-  .book-link:hover {
-    text-decoration: underline;
-  }
-</style>
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            height: 40px;
+            box-sizing: border-box;
+
+            padding: 10px 15px;
+            margin: 5px;
+
+            background-color: #333;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .button:hover {
+            background-color: #555;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap; gap: 5px;
+        }
+
+        .navigation-buttons .button {
+            margin: 0;
+            height: 40px;
+            box-sizing: border-box;
+        }
+
+        /* Book grid */
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 35px;
+        }
+
+        /* Book card */
+        .book-card {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .book-card h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 22px;
+        }
+
+        .book-card p {
+            margin: 8px 0;
+        }
+
+        .book-link {
+            color: #333;
+            text-decoration: none;
+        }
+
+        .book-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Book cover */
+        .book-cover {
+            width: 160px;
+            height: 240px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin: 15px 0 20px 0;
+        }
+
+        /* Forms inside cards */
+        .book-card form {
+            margin: 8px 0;
+        }
+
+        .rating-form {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        select {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .rating {
+            margin: 10px 0;
+        }
+
+        .delete-message {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        /* Responsive design */
+        @media (max-width: 900px) {
+            .book-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 20px;
+            }
+
+            .book-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .book-cover {
+                width: 150px;
+                height: 225px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <form action="/" method="GET">
-    <input type="text" name="search" placeholder="Search for a book">
-    <button type="submit">Search</button>
-  </form>
-  <div>
-    <a class="button" href="/add_book">Add a book</a>
-    <a class="button" href="/add_author">Add an author</a>
-    <a class="button" href="/?sort_by=title">Sort by title</a>
-    <a class="button" href="/?sort_by=author">Sort by author</a>
-    <a class="button" href="{{ url_for('recommendation') }}">💡 Book recommendation</a>
+    <div class="container">
+        <h1>📚 My Book Library</h1>
 
-  </div>
+        <!-- Search -->
+        <form class="search-form" action="/" method="GET">
+            <input type="text" name="search" placeholder="Search for a book">
+            <button type="submit">Search</button>
+        </form>
 
-  {% with messages = get_flashed_messages() %}
-  {% if messages %}
-    {% for message in messages %}
-      <p class="delete-message">{{ message }}</p>
-    {% endfor %}
-  {% endif %}
-{% endwith %}
+        <!-- Navigation buttons -->
+        <div class="navigation-buttons">
+            <a class="button" href="/add_book">Add a book</a>
+            <a class="button" href="/add_author">Add an author</a>
+            <a class="button" href="/?sort_by=title">Sort by title</a>
+            <a class="button" href="/?sort_by=author">Sort by author</a>
+            <a class="button" href="{{ url_for('recommendation') }}">💡 Book recommendation</a>
+        </div>
 
-  {% for book in books %}
-    <div>
-      <h3>
-          <a class="book-link" href="{{ url_for('book_detail', book_id=book.id) }}">
-              {{ book.title }}
-          </a>
-      </h3>
-      <p>
-          Author:
-          <a class="book-link" href="{{ url_for('author_detail', author_id=book.author.id) }}">
-              {{ book.author.name }}
-          </a>
-      </p>
-      <form action="{{ url_for('delete_author', author_id=book.author.id) }}" method="POST">
-          <button type="submit">Delete author</button>
-      </form>
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p class="delete-message">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
 
-      <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg"
-           alt="No cover found for {{ book.title }}">
+        <!-- Books -->
+        <div class="book-grid">
+            {% for book in books %}
+                <div class="book-card">
+                    <h3>
+                        <a class="book-link" href="{{ url_for('book_detail', book_id=book.id) }}">
+                            {{ book.title }}
+                        </a>
+                    </h3>
 
-      <form action="{{ url_for('rate_book', book_id=book.id) }}" method="POST">
-          <label for="rating-{{ book.id }}">Rating:</label>
+                    <p>
+                        Author:
+                        <a class="book-link" href="{{ url_for('author_detail', author_id=book.author.id) }}">
+                            {{ book.author.name }}
+                        </a>
+                    </p>
 
-          <select name="rating" id="rating-{{ book.id }}">
-              {% for number in range(1, 11) %}
-                  <option value="{{ number }}">{{ number }}</option>
-              {% endfor %}
-          </select>
+                    <img class="book-cover" src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-M.jpg" alt="No cover found for {{ book.title }}">
 
-          <button type="submit">Rate now</button>
-      </form>
+                    <!-- Rating -->
+                    <form class="rating-form" action="{{ url_for('rate_book', book_id=book.id) }}" method="POST">
+                        <label for="rating-{{ book.id }}">Rating:</label>
+                        <select name="rating" id="rating-{{ book.id }}">
+                            {% for number in range(1, 11) %}
+                                <option value="{{ number }}">{{ number }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit">Rate now</button>
+                    </form>
 
-      {% if book.rating %}
-        <p><strong>Bewertung: ⭐{{ book.rating }}/10</strong></p>
-      {% endif %}
+                    {% if book.rating %}
+                        <p class="rating">
+                            <strong>Bewertung: ⭐{{ book.rating }}/10</strong>
+                        </p>
+                    {% endif %}
 
-      <form action="{{ url_for('delete_book', book_id=book.id) }}" method="POST">
-        <button type="submit">Delete book</button>
-      </form>
+                    <!-- Delete author -->
+                    <form action="{{ url_for('delete_author', author_id=book.author.id) }}" method="POST">
+                        <button type="submit">Delete author</button>
+                    </form>
+
+                    <!-- Delete book -->
+                    <form action="{{ url_for('delete_book', book_id=book.id) }}" method="POST">
+                        <button type="submit">Delete book</button>
+                    </form>
+                </div>
+            {% else %}
+                <p>No book found for this search!</p>
+            {% endfor %}
+        </div>
     </div>
-  {% else %}
-    <p>No book found for this search!</p>
-  {% endfor %}
-
 </body>
 </html>
-
