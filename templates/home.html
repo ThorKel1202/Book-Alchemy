@@ -67,6 +67,8 @@
     <a class="button" href="/add_author">Add an author</a>
     <a class="button" href="/?sort_by=title">Sort by title</a>
     <a class="button" href="/?sort_by=author">Sort by author</a>
+    <a class="button" href="{{ url_for('recommendation') }}">💡 Book recommendation</a>
+
   </div>
 
   {% with messages = get_flashed_messages() %}

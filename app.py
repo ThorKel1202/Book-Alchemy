@@ -1,10 +1,16 @@
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
-import os
 from data_models import db, Author, Book
+import os
+from openai import OpenAI
+import requests
+
 app = Flask(__name__)
 app.secret_key = "dev-secret-key"
+
+client = OpenAI()
+
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(basedir, 'data/library.sqlite')}"
@@ -140,6 +146,124 @@ def rate_book(book_id):
         flash("The rating must be between 1 and 10!")
 
     return redirect(url_for("home"))
+
+
+def get_cover_url(title, author):
+    url = "https://www.googleapis.com/books/v1/volumes"
+
+    params = {
+        "q": f"intitle:{title} inauthor:{author}",
+        "maxResults": 10
+    }
+
+    response = requests.get(url, params=params)
+
+    print("GOOGLE BOOKS STATUS:", response.status_code)
+
+    if response.status_code != 200:
+        return None
+
+    data = response.json()
+
+    print("ANZAHL TREFFER:", data.get("totalItems", 0))
+
+    for book in data.get("items", []):
+        volume_info = book.get("volumeInfo", {})
+
+        print(
+            "TREFFER:",
+            volume_info.get("title"),
+            "|",
+            volume_info.get("authors"),
+            "| COVER:",
+            volume_info.get("imageLinks")
+        )
+
+        if volume_info.get("imageLinks"):
+            return volume_info["imageLinks"].get("thumbnail")
+
+    return None
+
+@app.route("/recommendation")
+def recommendation():
+    books = Book.query.all()
+    
+    book_list = []
+    
+    for book in books:
+        book_info = f"{book.title} von {book.author.name}"
+    
+        if book.rating:
+            book_info += f" (Bewertung: {book.rating}/10)"
+    
+        book_list.append(book_info)
+    
+    prompt = f"""
+    Du bist ein Buchexperte.
+    
+    Der Nutzer hat folgende Bücher in seiner Bibliothek:
+    
+    {chr(10).join(book_list)}
+    
+    Empfiehl genau EIN weiteres Buch, das gut zu seiner bisherigen
+    Bibliothek passt.
+    
+    Berücksichtige dabei auch die Bewertungen, sofern vorhanden.
+    
+    Gib deine Antwort exakt in diesem Format zurück:
+    
+    Titel: ...
+    Autor: ...
+    ISBN: ...
+    Begründung: ...
+    
+    Verwende eine echte ISBN-13 des empfohlenen Buches.
+    """
+    
+    response = client.responses.create(
+        model="gpt-5.4-mini",
+        input=prompt
+    )
+    
+    recommendation_text = response.output_text
+    
+    lines = recommendation_text.splitlines()
+    
+    title = ""
+    author = ""
+    isbn = ""
+    reason = ""
+    
+    for line in lines:
+        if line.startswith("Titel:"):
+            title = line.replace("Titel:", "").strip()
+        
+        elif line.startswith("Autor:"):
+            author = line.replace("Autor:", "").strip()
+        
+        elif line.startswith("ISBN:"):
+            isbn = line.replace("ISBN:", "").strip()
+            isbn = isbn.replace("-", "").replace(" ", "")
+        
+        elif line.startswith("Begründung:"):
+            reason = line.replace("Begründung:", "").strip()
+    
+    print("EMPFOHLENE ISBN:", isbn)
+    print("EMPFOHLENER TITEL:", title)
+    print("EMPFOHLENER AUTOR:", author)
+    
+    cover_url = get_cover_url(title, author)
+    
+    print("COVER URL:", cover_url)
+    
+    return render_template(
+        "recommendation.html",
+        title=title,
+        author=author,
+        isbn=isbn,
+        reason=reason,
+        cover_url=cover_url
+    )
 
 
 if __name__ == "__main__":

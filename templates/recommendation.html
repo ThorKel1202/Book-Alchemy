@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+
+<html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Book recommendation</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 40px;
+        background-color: #f4f4f4;
+        text-align: center;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    h1 {
+        margin-bottom: 30px;
+    }
+
+    .recommendation {
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+        display: flex;
+        gap: 30px;
+        align-items: center;
+
+        text-align: left;
+    }
+
+    .cover {
+        width: 180px;
+        height: auto;
+        border-radius: 5px;
+    }
+
+    .cover-container {
+    width: 180px;
+    flex-shrink: 0;
+    }
+
+    .cover-placeholder {
+    width: 180px;
+    height: 270px;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    color: #666;
+    font-size: 16px;
+    text-align: center;
+    }
+
+    .placeholder-icon {
+        font-size: 50px;
+        margin-bottom: 15px;
+    }
+
+    .book-info {
+        flex: 1;
+    }
+
+    .book-info h2 {
+        margin-top: 0;
+        font-size: 28px;
+    }
+
+    .author {
+        font-size: 18px;
+        margin-bottom: 20px;
+    }
+
+    .reason {
+        line-height: 1.6;
+    }
+
+    .button {
+        display: inline-block;
+        padding: 10px 18px;
+        margin-top: 30px;
+        background-color: #333;
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: bold;
+    }
+
+    .button:hover {
+        background-color: #555;
+    }
+
+    @media (max-width: 600px) {
+        .recommendation {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .cover {
+            width: 150px;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>💡 My book recommendation for you</h1>
+
+    <div class="recommendation">
+
+        <div class="cover-container">
+
+            {% if cover_url %}
+                <img
+                    class="cover"
+                    src="{{ cover_url }}"
+                    alt="Cover from the book: {{ title }}"
+                >
+            {% else %}
+                <div class="cover-placeholder">
+                    <div class="placeholder-icon">📖</div>
+                    <div>No cover available</div>
+                </div>
+            {% endif %}
+
+        </div>
+
+        <div class="book-info">
+
+            <h2>{{ title }}</h2>
+
+            <p class="author">
+                <strong>Author:</strong> {{ author }}
+            </p>
+
+            <p class="reason">
+                <strong>Why this book?</strong><br>
+                {{ reason }}
+            </p>
+
+        </div>
+
+    </div>
+
+    <a href="{{ url_for('home') }}" class="button">
+        📚 Back to the library
+    </a>
+
+</div>
+</body> </html>
